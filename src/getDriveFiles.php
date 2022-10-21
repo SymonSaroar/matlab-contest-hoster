@@ -18,8 +18,8 @@ do {
 $everythingTry = false;
 $isPractice = true;
 $servername = "localhost";
-$username = "root";
-$password = "sin90=one";
+$username = "database-username";
+$password = "database-password";
 $dbname = "substatus";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
