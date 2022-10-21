@@ -2,8 +2,6 @@
 !**/src
 !/images
 !*.*
-!docs
-!docs/images
 **/animator.js
 **/rankingTableUpdate.js
 **/jquery*.js
