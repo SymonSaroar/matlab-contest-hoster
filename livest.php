@@ -3,22 +3,22 @@
 require __DIR__ . '/src/SimpleXlSX.php';
 
 $servername = "localhost";
-$username = "root";
-$password = "sin90=one";
+$username = "database-username";
+$password = "database-password";
 $dbname = "substatus";
 
 $info = SimpleXLSX::parse('name_pr.xlsx');
-$prcode = array();
-$pr_uni = array();
+$prcode = [];
+$pr_uni = [];
 $data = SimpleXLSX::parse('localData.xlsx');
-foreach($info->rows() as $pr){
-    $prcode[$pr[1]] = $pr[0];
-    $pr_uni[$pr[1]] = $pr[2];
+foreach ($info->rows() as $pr) {
+  $prcode[$pr[1]] = $pr[0];
+  $pr_uni[$pr[1]] = $pr[2];
 }
 
 $conn = new mysqli($servername, $username, $password, $dbname);
-if($conn->connect_error){
-    die("Connection Failed : " . $conn->connect_error);
+if ($conn->connect_error) {
+  die("Connection Failed : " . $conn->connect_error);
 }
 
 $sql = 'SELECT * FROM submissions ORDER BY id DESC LIMIT 5';
@@ -32,44 +32,37 @@ echo '
         </colgroup>
         ';
 echo '<tr><th class="nameBottom">problem</th><th class="nameBottom">status</th></tr>';
-if($result->num_rows > 0){
-    while($row = $result->fetch_assoc()){
-        echo '<tr>';
-        echo '<td class="nameBottom">' . $row['url'] . '</td>';
-        $stat = $row['status'];
-        if($stat == -1){
-            echo '<td class="nameBottom">pending...</td>';
-        }
-        else if($stat == -3){
-            echo '<td class="nameBottom">denial</td>';
-        }
-        else if($stat == 1){
-            echo '<td  class="nameBottom">accepted</td>';
-        }
-        else if($stat == 2){
-            echo '<td  class="nameBottom">time limit</td>';
-        }
-        else if($stat == 3){
-            echo '<td class="nameBottom">runtime error</td>';
-        }
-        else if($stat == 4){
-            echo '<td class="nameBottom">wrong answer</td>';
-        }
-        $subTime = new DateTime($row['time']);
-        $currentTime = new DateTime('now', new DateTimezone('Asia/Dhaka'));
-        $sstr = $subTime->format('Y-m-d H:i:s');
-        $cstr = $currentTime->format('Y-m-d H:i:s');
-        $ago = strtotime($cstr) - strtotime($sstr);
-        if($ago < 60){
-            echo '<td class="numBottom">' . $ago .'s ago</td>';
-        }
-        else if(floor($ago / 60) < 60){
-            echo '<td class="numBottom">' . floor($ago / 60) .'m ago</td>';
-        }
-        else{
-            echo '<td class="numBottom">' . floor($ago / 60 / 60) .'h ago</td>';
-        }
-        echo "</tr>";
+if ($result->num_rows > 0) {
+  while ($row = $result->fetch_assoc()) {
+    echo '<tr>';
+    echo '<td class="nameBottom">' . $row['url'] . '</td>';
+    $stat = $row['status'];
+    if ($stat == -1) {
+      echo '<td class="nameBottom">pending...</td>';
+    } elseif ($stat == -3) {
+      echo '<td class="nameBottom">denial</td>';
+    } elseif ($stat == 1) {
+      echo '<td  class="nameBottom">accepted</td>';
+    } elseif ($stat == 2) {
+      echo '<td  class="nameBottom">time limit</td>';
+    } elseif ($stat == 3) {
+      echo '<td class="nameBottom">runtime error</td>';
+    } elseif ($stat == 4) {
+      echo '<td class="nameBottom">wrong answer</td>';
     }
+    $subTime = new DateTime($row['time']);
+    $currentTime = new DateTime('now', new DateTimezone('Asia/Dhaka'));
+    $sstr = $subTime->format('Y-m-d H:i:s');
+    $cstr = $currentTime->format('Y-m-d H:i:s');
+    $ago = strtotime($cstr) - strtotime($sstr);
+    if ($ago < 60) {
+      echo '<td class="numBottom">' . $ago . 's ago</td>';
+    } elseif (floor($ago / 60) < 60) {
+      echo '<td class="numBottom">' . floor($ago / 60) . 'm ago</td>';
+    } else {
+      echo '<td class="numBottom">' . floor($ago / 60 / 60) . 'h ago</td>';
+    }
+    echo "</tr>";
+  }
 }
 echo "</tbody></table>";
