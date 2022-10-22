@@ -1,5 +1,26 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+
+define('CREDENTIALS', __DIR__ . '/credentials.json');
+define('SERVERNAME', 'localhost');
+define('DATABASE_USERNAME', 'database-username');
+define('DATABASE_PASSWORD', 'database-password');
+define('DATABASE_NAME', 'substatus');
+define('ROW_COUNTER', 'current_row.txt');
+
+$problems = [
+  "chocolates",
+  "std_distance",
+  "passive",
+  "img_com",
+  "head",
+  "color",
+]; // Problem Names
+
+$responseSheetId = "1_gznc30QT71SyITz7uyfRZV7R0KKloK1djsmsGIe18g"; // Sheets to Change
+$responseSheetGId = "1533225181";
+$responseSheetName = 'response';
+
 function getPenalty($time)
 {
   // echo $time;
@@ -18,44 +39,32 @@ do {
   try {
     $everythingTry = false;
     $isPractice = true;
-    $servername = "localhost";
-    $username = "database-username";
-    $password = "database-password";
-    $dbname = "substatus";
+    $servername = SERVERNAME;
+    $username = DATABASE_USERNAME;
+    $password = DATABASE_PASSWORD;
+    $dbname = DATABASE_NAME;
 
     $conn = new mysqli($servername, $username, $password, $dbname);
-
-    $problems = [
-      "chocolates",
-      "std_distance",
-      "passive",
-      "img_com",
-      "head",
-      "color",
-    ]; // Problem Names
 
     $client = new \Google_Client();
     $client->setApplicationName('Drive File Retriever');
     $client->setScopes([\Google_Service_Drive::DRIVE]);
     $client->setAccessType('offline');
-    $client->setAuthConfig(__DIR__ . '/credentials.json');
+    $client->setAuthConfig(CREDENTIALS);
 
     $service = new Google_Service_Drive($client);
 
     $client->setScopes([\Google_Service_Sheets::SPREADSHEETS_READONLY]);
 
     $responseSheetService = new Google_Service_Sheets($client);
-    // 1_gznc30QT71SyITz7uyfRZV7R0KKloK1djsmsGIe18g
-    // 1533225181
-    $responseSheetId = "1_gznc30QT71SyITz7uyfRZV7R0KKloK1djsmsGIe18g"; // Sheets to Change
-    $responseSheetGId = "1533225181";
+
     while (1) {
-      $rowCounterFileName = "current_row.txt"; // Row initialization
+      $rowCounterFileName = ROW_COUNTER; // Row initialization
       $rowCounterFile = fopen($rowCounterFileName, "r");
       fscanf($rowCounterFile, "%d", $rowCounter);
       fclose($rowCounterFile);
       $rowCounter++;
-      $range = "response!A{$rowCounter}:N";
+      $range = $responseSheetName . "!A{$rowCounter}:N";
       echo $range;
       echo "\n";
       $tryAgain = false;
