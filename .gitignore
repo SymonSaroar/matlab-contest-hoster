@@ -8,4 +8,6 @@
 **/test*.*
 **/*.mat
 **/*.json
+!*/composer.json
+!*/settings.json
 */docs
