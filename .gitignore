@@ -7,4 +7,5 @@
 **/jquery*.js
 **/test*.*
 **/*.mat
-**/credentials.json
+# **/*.json
+*/docs
