@@ -20,16 +20,27 @@ The index.php reads the database and constantly updates the webpage.
 1. Install XAMPP
 2. Install Composer
 3. Run `composer update` in ./src/
-4. Get authentication token from google api.
-5. Create a mySQL database using phpMyAdmin named 'substatus'.
+4. Get authentication credentials from google api.
+   1. Create a Google console project. 
+   2. Enable Google Drive and Google Sheets API
+   3. Create a service account for those two APIs
+   4. Generate an API key, download it and save as `credentials.json`
+5. Create a mySQL database using phpMyAdmin named `substatus`.
+   1. Contains a table - `submissions`
+   2. Contains 3 fields - `promocode, url, status`
 6. start MATLAB parallel processing.
 7. run `php ./src/getDriveFiles.php` in a terminal.
-8. start the apache webserver.
-9. Test everything is working
+8. start the Apache and MySql server from XAMPP.
+9. Create a individual folder for each participant, folder name should be the promocode. 
+10. Each folder should contain judge scripts and judge data.
+11. Initialize `current_row.txt` with value '0' to start from the first row in response sheet.
+12. Test everything is working.
 
 # Things to consider
-1. Properly set apache denylist.
+1. Properly set Apache server denylist.
 2. add credientials and auth tokens to github ignorelist.
 3. use seperate file for database credentials , and add that to github ignorelist.
 4. Use online server for the webpage.
    1. Google sheet as the leaderboard. (in development - `updateLeaderboard.php`)
+   
+   This helps with large traffic during a contest.
